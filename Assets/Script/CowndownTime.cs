@@ -13,16 +13,26 @@ public class CowndownTime : MonoBehaviour
     void Start()
     {
         currTime = startTime;
+        meshPro.GetComponent<TextMeshProUGUI>();
+        meshPro.enabled = false;
+    }
+
+    public void SetTime(float time){
+        currTime = time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        currTime -= 1 * Time.deltaTime;
-        meshPro.text = currTime.ToString("0");
-        if(currTime <= 0)
-        {
-            currTime = 0;
+        if (currTime > 0){
+            currTime -= Time.deltaTime;
+            meshPro.enabled = true;
+            meshPro.text = currTime.ToString("0");
+            if (currTime <= 0)
+            {
+                currTime = 0;
+                meshPro.enabled = false;
+            }
         }
     }
 }

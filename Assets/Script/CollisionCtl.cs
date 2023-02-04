@@ -6,15 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class CollisionCtl : MonoBehaviour
 {
+    public static CollisionCtl collisionCtl;
     [SerializeField] private AudioClip finishAudio;
     [SerializeField] private AudioClip deathAudio;
     [SerializeField] private ParticleSystem finishParticle;
     [SerializeField] private ParticleSystem deathParticle;
+    private float scaleUpDuration;
+    private float shieldDuration;
     
 
     private AudioSource audioSource;
     private bool isCollision = false;
     
+    void Awake(){
+        if (collisionCtl != null){
+            Debug.Log("More than 1 instance of CollisionCtl found.");
+        }
+        collisionCtl = this;
+    }
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -108,14 +118,18 @@ public class CollisionCtl : MonoBehaviour
         {
             gameObject.transform.localScale *= 1.5f;
             //sau 5s thi se tro ve trang thai ban dau
-            Invoke(nameof(ReturnScale), 5f);
+            Invoke(nameof(ReturnScale), scaleUpDuration);
         }
         if (other.gameObject.tag == "Khien")
         {
             ReponNoCollision();
             //sau 5s ket thuc trang thai khien
             
-            Invoke(nameof(NoReponNoCollision), 3f);
+            Invoke(nameof(NoReponNoCollision), shieldDuration);
         }
+    }
+
+    public void SetScaleUpTimer(float time){
+        scaleUpDuration = time;
     }
 }
